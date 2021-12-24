@@ -1,36 +1,36 @@
-const { Sequelize, DataTypes } = require("sequelize/dist")
+const sequelize = require("sequelize");
 
-module.exports = () => {
+module.exports = (sequelize,DataTypes) => {
 
-  const User = Sequelize.define( "User", {
-      firstName: {
-          type : DataTypes.STRING,
-          allowNull : false
-      },
-      lastName : {
-        type : DataTypes.STRING,
-        allowNull : false
-      },
-      email : {
-          type : DataTypes.STRING,
-          allowNull : false
-      },
-      gender : {
-          type : DataTypes.STRING,
-          allowNull : false
-      },
-      DoB : {
-          type : DataTypes.STRING,
-          allowNull : false
-      },
-      phone : {
-          type : DataTypes.STRING,
-          allowNull : false
-      },
-    //   {
-    //       await User.sync({force : true})
-    //   }
-  })
-    
-   return User
+    const User = sequelize.define( "User", {
+     
+        firstName : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+        lastName : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+        firstName : {
+            type : DataTypes.STRING,
+            allowNull : false
+        }, 
+        email : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+        gender : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+        DoB : {
+            type : DataTypes.DATE,
+            allowNull : false
+        },
+
+
+    })
+
+    return User
 }
