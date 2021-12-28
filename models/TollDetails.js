@@ -2,7 +2,7 @@ const sequelize = require("sequelize");
 
 module.exports = (sequelize,DataTypes) => {
 
-    const Toll = sequelize.define( "TollDetails", {
+    const TollDetails = sequelize.define( "TollDetails", {
      
         branchNumber : {
             type : DataTypes.INTEGER,
@@ -21,7 +21,7 @@ module.exports = (sequelize,DataTypes) => {
             allowNull : false
         },
        
-    })
+    });
 
-    return Toll
+    return TollDetails;
 }
