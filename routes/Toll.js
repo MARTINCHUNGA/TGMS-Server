@@ -10,7 +10,7 @@ router.get("/", (req, res)=> {
 router.post("/", async (req,res) => {
     const toll = req.body;  //receive data
     await TollDetails.create(toll); //insert into the database
-   res.json(toll);  //return the same data to be sure
+    res.json(toll);  //return the same data to be sure
 
 });
 
