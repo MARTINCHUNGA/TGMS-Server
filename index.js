@@ -11,15 +11,17 @@ const db = require("./models")
 
 //import routers here
 const userRouter = require("./routes/User")
+const vehicleRouter = require("./routes/Vehicle")
 
 app.use("/users", userRouter)
+app.use("/vehicles", vehicleRouter)
 
 
 
 db.sequelize.sync().then(() => {
 
-    app.listen(3000, () => {
-        console.log("Server running on port : 3000")
+    app.listen(3001, () => {
+        console.log("Server running on port : 3001")
     })
 
 })
