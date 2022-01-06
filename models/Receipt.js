@@ -1,31 +1,28 @@
+
 const sequelize = require("sequelize");
 
 module.exports = (sequelize,DataTypes) => {
 
-    const Users = sequelize.define( "Users", {
+    const Receipts = sequelize.define( "Receipts", {
      
-        firstName : {
+        tollName : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        lastName : {
+        District : {
             type : DataTypes.STRING,
             allowNull : false
         },
 
-        email : {
+        vehicleType : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        gender : {
+        price : {
             type : DataTypes.STRING,
             allowNull : false
-        },
-        DoB : {
-            type : DataTypes.DATE,
-            allowNull : false
-        },
+        }
     })
 
-    return Users
+    return Receipts
 }
