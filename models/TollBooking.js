@@ -2,8 +2,7 @@ const sequelize = require("sequelize");
 
 module.exports = (sequelize,DataTypes) => {
 
-    const TollDetails = sequelize.define( "TollDetails", {
-
+    const TollBooking = sequelize.define( "TollBooking", {
       
     district : {
         type : DataTypes.STRING,
@@ -13,14 +12,23 @@ module.exports = (sequelize,DataTypes) => {
         type : DataTypes.STRING,
         allowNull : false
     }, 
-    section : {
+    
+    vehicleType : {
         type : DataTypes.STRING,
         allowNull : false
     },
-         
+    price : {
+        type : DataTypes.STRING,
+        allowNull : false
+    },
+    tripPlan : {
+        type : DataTypes.STRING,
+        allowNull : false
+    },    
+       
        
        
     });
 
-    return TollDetails;
+    return TollBooking;
 }

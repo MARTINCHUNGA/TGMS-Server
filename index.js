@@ -13,10 +13,14 @@ const db = require("./models");
 const userRouter = require("./routes/User");
 const vehicleRouter = require("./routes/Vehicle");
 const tollRouter = require("./routes/Toll");
+const tollBookingRouter = require("./routes/TollBooking");
+
 
 app.use("/users", userRouter);
 app.use("/vehicles", vehicleRouter);
 app.use("/tolls", tollRouter);
+app.use("/tollBooking", tollBookingRouter);
+
 
 
 db.sequelize.sync().then(() => {

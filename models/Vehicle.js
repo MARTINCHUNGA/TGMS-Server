@@ -14,5 +14,5 @@ module.exports = (sequelize,DataTypes) => {
         },
     })
 
-    return Vehicles
+    return Vehicles;
 }

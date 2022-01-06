@@ -3,8 +3,9 @@ const router = express.Router();
 const { TollDetails } = require("../models");
 
 
-router.get("/", (req, res)=> {
-    res.json("these are the tolls");
+router.get("/", async(req, res)=> {
+    const listOfTolls = await TollDetails.findAll();
+    res.json(listOfTolls);
 });
 
 router.post("/", async (req,res) => {
