@@ -16,10 +16,6 @@ const tollRouter = require("./routes/Toll");
 <<<<<<< HEAD
 const tollBookingRouter = require("./routes/TollBooking");
 
-=======
-const fairRouter = require("./routes/Fair")
-const receiptRouter = require("./routes/Receipt")
->>>>>>> 0ff1095722a06a46bcfc8993bb1b397348ef41a9
 
 app.use("/users", userRouter);
 app.use("/vehicles", vehicleRouter);
