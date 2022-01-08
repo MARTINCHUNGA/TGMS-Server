@@ -8,6 +8,15 @@ router.get("/", async(req, res)=> {
     res.json(listOfTolls);
 });
 
+router.get("/byId/:id", async(req, res)=> {
+    const id = req.params.id;
+    res.json(listOfTolls);
+    const tolls = await TollDetails.findByPK(id);
+    res.json(tolls);
+
+
+});
+
 router.post("/", async (req,res) => {
     const toll = req.body;  //receive data
     await TollDetails.create(toll); //insert into the database

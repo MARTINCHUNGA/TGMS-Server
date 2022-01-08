@@ -1,17 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const { TollBooking } = require("../models");
+const { TollBookings } = require("../models");
 
 
 router.get("/", async(req, res)=> {
-    const listOfTollBooking = await TollBooking.findAll();
-    res.json(listOfTollBooking);
+    const listOfBookings = await TollBookings.findAll();
+    res.json(listOfBookings);
+});
+
+
+router.get("/:tollDetailId", async(req, res)=> {
+    const tollDetailId = req.params.tollDetailId;
+    const bookings = await TollBookings.findAll({where: {TollDetailId: tollDetailId} });
+    res.json(bookings);
+
 });
 
 router.post("/", async (req,res) => {
     const tollBooking = req.body;  //receive data
-    await TollBooking.create(toll); //insert into the database
-    res.json(tollBookin);  //return the same data to be sure
+    await TollBookings.create(tollBooking); //insert into the database
+    res.json(tollBooking);  //return the same data to be sure
 
 });
 

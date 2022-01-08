@@ -25,7 +25,16 @@ module.exports = (sequelize,DataTypes) => {
             type : DataTypes.DATE,
             allowNull : false
         },
-    })
+    });
+
+    Users.associate = (models) => {
+        Users.belongsToMany(models.TollBookings, {
+            through: "userBooking",
+        });
+
+    }
+
+    
 
     return Users
 }
