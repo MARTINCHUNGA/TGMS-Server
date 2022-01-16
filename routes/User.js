@@ -11,7 +11,7 @@ router.get("/", async(req, res)=> {
     res.json(allUsers)
 });
 
-router.post("/", async (req,res) => {
+router.post("/adduser", async (req,res) => {
     const user = req.body;  //receive data
     await Users.create(user); //insert into the database
     res.json(user);  //return the same data to be sure

@@ -29,7 +29,8 @@ module.exports = (sequelize,DataTypes) => {
     TollBookings.associate = (models) => {
         TollBookings.belongsToMany(models.Users, {
             through: "userBooking",
-        });   
+        }); 
+        TollBookings.belongsTo(models.TollDetails)  
     }
 
     return TollBookings;
