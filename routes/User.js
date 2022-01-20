@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 const { Users } = require("../models");
+const bcrypt = require('bcrypt')
+const { sign } = require('jsonwebtoken')
 
 // User routes
 router.get("/", async(req,res) => {
@@ -30,19 +32,66 @@ router.get("/specific/:id", (req, res) =>{
   },)
 
 router.post("/addUser", async(req, res) => {
-    return Users
-      .create({ 
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        gender : req.body.gender,
-        email : req.body.email,
-        DoB : req.body.DoB
-      })
-      .then((user) => res.status(201).send(user))
-      .catch((error) => res.status(400).send(error));
+  const {
+    firstName,
+    lastName,
+    email,
+    gender,
+    DoB,
+    username,
+    password
+
+  } = req.body
+  bcrypt.hash(password, 10).then((hash) => {
+     return Users.create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      gender : gender,
+      DoB: DoB,
+      username: username,
+      password : hash
+    })
+    .then((user) => res.status(201).send(user))
+    .catch((error) => res.status(400).send(error));
+  })
+    // return Users
+    //   .create({ 
+    //     firstName : req.body.firstName,
+    //     lastName : req.body.lastName,
+    //     gender : req.body.gender,
+    //     email : req.body.email,
+    //     DoB : req.body.DoB
+    //   })
+    //   .then((user) => res.status(201).send(user))
+    //   .catch((error) => res.status(400).send(error));
   },
 ) 
 
+router.post("/login", async(req,res) =>{
+  const { username, password } = req.body
+  const user = await Users.findOne({ where: { username: username}}) 
+  //res.send(user.password)
+
+  //check if the user exist
+  if(!user) res.json({error: "User does not exist"});
+
+  bcrypt.compare(password, user.password).then((match) => {
+
+    if(!match) res.json({error : "Password and username does not match"});
+
+
+    const accessToken = sign(
+      { username : user.username, id : user.id},
+       "importantsecret"
+       ); 
+
+    
+    res.json(accessToken);
+  })
+
+  
+})
 
 router.delete("/delete/:id", async(req,res) => {
     return Users

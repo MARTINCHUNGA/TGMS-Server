@@ -31,11 +31,15 @@ router.get("/specific/:id", (req, res) =>{
 
 router.post("/addBooking", async(req, res) => {
     return TollBookings
-      .create({ 
+      .create({
+        include: [{
+          model : Vehicles, as : 'vehicleType'
+        }]
+      },{ 
         district : req.body.district,
         tollName : req.body.tollName,
-        vehicleType : req.body.section,
-        price : req.body.price,
+        // vehicleType : req.body.section,
+        // price : req.body.price,
         tripPlan : req.body.tripPlan
       })
       .then((bookings) => res.status(201).send(bookings))

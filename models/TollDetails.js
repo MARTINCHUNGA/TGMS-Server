@@ -20,7 +20,10 @@ module.exports = (sequelize,DataTypes) => {
 
     TollDetails.associate = (models) => {
         TollDetails.hasMany(models.TollBookings, {
-            onDelete: "cascade",
+            //onDelete: "cascade",
+            foreignKey: 'TollDetail_id',
+            as : 'TollBookings',
+            onDelete: 'CASCADE'
         });   
     }
 

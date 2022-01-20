@@ -5,7 +5,7 @@ const { Vehicles } = require("../models");
 
 //vehicle routes
 
-router.get("/", async(req,res) => {
+router.get("/allvehicle", async(req,res) => {
     return Vehicles
            .findAll()
            .then((vehicle) => res.status(200).send(vehicle))
@@ -30,7 +30,7 @@ router.get("/specific/:id", (req, res) =>{
       });
   },)
 
-router.post("/addUser", async(req, res) => {
+router.post("/addVehicle", async(req, res) => {
     return Vehicles
       .create({ 
         vehicleType : req.body.vehicleType,

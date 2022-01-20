@@ -25,6 +25,14 @@ module.exports = (sequelize,DataTypes) => {
             type : DataTypes.DATE,
             allowNull : false
         },
+        password : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+        username : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
     });
 
     Users.associate = (models) => {
