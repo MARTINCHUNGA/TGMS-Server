@@ -4,11 +4,8 @@ module.exports = (sequelize,DataTypes) => {
 
     const Users = sequelize.define( "Users", {
      
-        firstName : {
-            type : DataTypes.STRING,
-            allowNull : false
-        },
-        lastName : {
+        
+        username : {
             type : DataTypes.STRING,
             allowNull : false
         },
@@ -17,22 +14,22 @@ module.exports = (sequelize,DataTypes) => {
             type : DataTypes.STRING,
             allowNull : false
         },
-        gender : {
+        phone : {
             type : DataTypes.STRING,
-            allowNull : false
-        },
-        DoB : {
-            type : DataTypes.DATE,
             allowNull : false
         },
         password : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        username : {
+        confirmPassword : {
             type : DataTypes.STRING,
-            allowNull : false
+            allowNull : true
         },
+        // username : {
+        //     type : DataTypes.STRING,
+        //     allowNull : false
+        // },
     });
 
     Users.associate = (models) => {

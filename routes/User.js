@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 const { Users } = require("../models");
 const bcrypt = require('bcrypt')
-const { sign } = require('jsonwebtoken')
+const { sign } = require('jsonwebtoken');
+const { validateToken } = require("../middleware/Auth");
 
 // User routes
 router.get("/", async(req,res) => {
@@ -12,7 +13,6 @@ router.get("/", async(req,res) => {
            .then((user) => res.status(200).send(user))
            .catch((error) => res.status(400).send(error))
 }) 
-
 
 router.get("/specific/:id", (req, res) =>{
     return Users
@@ -31,47 +31,49 @@ router.get("/specific/:id", (req, res) =>{
       });
   },)
 
-router.post("/addUser", async(req, res) => {
+router.post("/register", async(req, res) => {
   const {
-    firstName,
-    lastName,
-    email,
-    gender,
-    DoB,
     username,
-    password
-
+    email,
+    phone,
+    password,
+    
   } = req.body
+   //Check if the user already exist 
+   const userAlreadyExists = await Users.findOne({where: {email}}).catch(
+    (err) => {
+      console.log("Error", err)
+    }
+  )
+  if (userAlreadyExists) {
+      return res.status(409).json({message: "User with email already exists!" })
+  }
+  //create user with hashed password
   bcrypt.hash(password, 10).then((hash) => {
-     return Users.create({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      gender : gender,
-      DoB: DoB,
+    const newUser = new Users({
       username: username,
-      password : hash
-    })
-    .then((user) => res.status(201).send(user))
-    .catch((error) => res.status(400).send(error));
+      email: email,
+      phone: phone,
+      password : hash,
+      confirmPassword : hash})
+  
+      //save the user 
+      const savedUser =  newUser.save().catch((err) => {
+        console.log("Error", err)
+        res.status(500).json({error: "cannot register user at the moment!"})
+      })
+      if(savedUser) res.json({message: "Thanks for registering"}) 
   })
-    // return Users
-    //   .create({ 
-    //     firstName : req.body.firstName,
-    //     lastName : req.body.lastName,
-    //     gender : req.body.gender,
-    //     email : req.body.email,
-    //     DoB : req.body.DoB
-    //   })
-    //   .then((user) => res.status(201).send(user))
-    //   .catch((error) => res.status(400).send(error));
+   
   },
 ) 
 
+
+
+
 router.post("/login", async(req,res) =>{
   const { username, password } = req.body
-  const user = await Users.findOne({ where: { username: username}}) 
-  //res.send(user.password)
+  const user = await Users.findOne({ where: { username: username }}) 
 
   //check if the user exist
   if(!user) res.json({error: "User does not exist"});
@@ -87,11 +89,17 @@ router.post("/login", async(req,res) =>{
        ); 
 
     
-    res.json(accessToken);
+    res.json({token: accessToken, username: user.username, id: user.id});
   })
 
   
 })
+
+//check if user is aunthenticated
+router.get("/auth", validateToken, (req,res) => {
+  res.json(req.user);
+})
+
 
 router.delete("/delete/:id", async(req,res) => {
     return Users

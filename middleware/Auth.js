@@ -1,3 +1,4 @@
+const res = require("express/lib/response");
 const { verify} = require("jsonwebtoken");
 
 const validateToken = (req,res,next) => {
@@ -16,5 +17,28 @@ const validateToken = (req,res,next) => {
   }
 }
 
+const authUser = (req, res, next) => {
+  if(req.user === null) {
+    res.status(403)
+    return res.send('You need to Sign in')
+  } else {
+    next()
+  }
 
-module.exports = { validateToken }
+}
+
+const authRole = (req, res, next) => {
+  return (req, res, next) => {
+    if(req.user.role !== role) {
+      res.status(401);
+      return res.send('Your not allowed');
+    } else {
+      next();
+    }
+  }
+}
+
+
+
+
+module.exports = { validateToken, authUser, authRole}

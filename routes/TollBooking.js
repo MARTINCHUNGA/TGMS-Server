@@ -1,4 +1,5 @@
 const express = require("express");
+const { authPage } = require("../middleware/middleware");
 const router = express.Router();
 const { TollBookings } = require("../models");
 
@@ -31,16 +32,17 @@ router.get("/specific/:id", (req, res) =>{
 
 router.post("/addBooking", async(req, res) => {
     return TollBookings
-      .create({
-        include: [{
-          model : Vehicles, as : 'vehicleType'
-        }]
-      },{ 
+      .create(
+        // include: [{
+        //   model : Vehicles, as : 'vehicleType'
+        // }]
+      { 
         district : req.body.district,
         tollName : req.body.tollName,
         // vehicleType : req.body.section,
         // price : req.body.price,
-        tripPlan : req.body.tripPlan
+        tripPlan : req.body.tripPlan,
+        TollDetail_id : req.body.TollDetail_id
       })
       .then((bookings) => res.status(201).send(bookings))
       .catch((error) => res.status(400).send(error));
@@ -65,7 +67,7 @@ router.delete("/delete/:id", async(req,res) => {
 
 });
 
-router.put("/update/:id", async(req,res) => {
+router.put("/update/:id", authPage(["admin","teacher"]), async(req,res) => {
     return TollBookings
            .findByPk(req.params.id)
            .then(bookings => {
