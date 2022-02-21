@@ -30,7 +30,7 @@ router.get("/specific/:id", (req, res) =>{
       });
   },)
 
-router.post("/addBooking", async(req, res) => {
+router.post("/", async(req, res) => {
     return TollBookings
       .create(
         // include: [{
@@ -50,7 +50,7 @@ router.post("/addBooking", async(req, res) => {
 ) 
 
 
-router.delete("/delete/:id", async(req,res) => {
+router.delete("/", async(req,res) => {
     return TollBookings
            .findByPk(req.params.id)
            .then(bookings =>{
