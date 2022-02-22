@@ -4,17 +4,17 @@ const router = express.Router();
 const { Users } = require("../models");
 const bcrypt = require('bcrypt')
 const { sign } = require('jsonwebtoken');
-const { validateToken } = require("../middleware/Auth");
+const { validateToken,authRole } = require("../middleware/Auth");
 
 // User routes
-router.get("/", async(req,res) => {
+router.get("/", validateToken, async(req,res) => {
     return Users
            .findAll()
            .then((user) => res.status(200).send(user))
            .catch((error) => res.status(400).send(error))
 }) 
 
-router.get("/specific/:id", (req, res) =>{
+router.get("/specific/:id", validateToken, (req, res) =>{
     return Users
       .findByPk(req.params.id)
       .then((user) => {
@@ -71,7 +71,7 @@ router.post("/register", async(req, res) => {
 
 
 
-router.post("/login", async(req,res) =>{
+router.post("/login",  async(req,res) =>{
   const { username, password } = req.body
   const user = await Users.findOne({ where: { username: username }}) 
 
@@ -87,21 +87,11 @@ router.post("/login", async(req,res) =>{
       { username : user.username, id : user.id},
        "importantsecret"
        ); 
-
-    
-    res.json({token: accessToken, username: user.username, id: user.id});
+    res.json(accessToken);
   })
-
-  
 })
 
-//check if user is aunthenticated
-router.get("/auth", validateToken, (req,res) => {
-  res.json(req.user);
-})
-
-
-router.delete("/delete/:id", async(req,res) => {
+router.delete("/delete/:id", validateToken, async(req,res) => {
     return Users
            .findByPk(req.params.id)
            .then(user =>{
@@ -118,7 +108,7 @@ router.delete("/delete/:id", async(req,res) => {
 
 });
 
-router.put("/update/:id", async(req,res) => {
+router.put("/update/:id", validateToken, async(req,res) => {
     return Users
            .findByPk(req.params.id)
            .then(user => {
