@@ -47,24 +47,26 @@ router.post("/register", async(req, res) => {
   )
   if (userAlreadyExists) {
       return res.status(409).json({message: "User with email already exists!" })
+  } else {
+
+    //create user with hashed password
+    bcrypt.hash(password, 10).then((hash) => {
+      const newUser = new Users({
+        username: username,
+        email: email,
+        phone: phone,
+        password : hash,
+        confirmPassword : hash})
+    
+        //save the user 
+        const savedUser =  newUser.save().catch((err) => {
+          console.log("Error", err)
+          res.status(500).json({error: "cannot register user at the moment!"})
+        })
+        if(savedUser) res.json({message: "Thanks for registering"}) 
+    })
+    
   }
-  //create user with hashed password
-  bcrypt.hash(password, 10).then((hash) => {
-    const newUser = new Users({
-      username: username,
-      email: email,
-      phone: phone,
-      password : hash,
-      confirmPassword : hash})
-  
-      //save the user 
-      const savedUser =  newUser.save().catch((err) => {
-        console.log("Error", err)
-        res.status(500).json({error: "cannot register user at the moment!"})
-      })
-      if(savedUser) res.json({message: "Thanks for registering"}) 
-  })
-   
   },
 ) 
 
@@ -76,19 +78,22 @@ router.post("/login",  async(req,res) =>{
   const user = await Users.findOne({ where: { username: username }}) 
 
   //check if the user exist
-  if(!user) res.json({error: "User does not exist"});
+  if(!user) {
+    res.json({error: "User does not exist"})
+  } else {
+    bcrypt.compare(password, user.password).then((match) => {
 
-  bcrypt.compare(password, user.password).then((match) => {
-
-    if(!match) res.json({error : "Password and username does not match"});
-
-
-    const accessToken = sign(
-      { username : user.username, id : user.id},
-       "importantsecret"
-       ); 
-    res.json(accessToken);
-  })
+      if(!match) {
+        res.json({error : "Password and username does not match"});
+      } else {
+        const accessToken = sign(
+          { username : user.username, id : user.id},
+           "importantsecret"
+           ); 
+        res.json(accessToken);
+      }
+    })
+  }
 })
 
 router.delete("/delete/:id", validateToken, async(req,res) => {
