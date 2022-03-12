@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "fact2022",
+    "password": "user",
     "database": "TGMS-Server",
     "host": "127.0.0.1",
     "dialect": "postgres"

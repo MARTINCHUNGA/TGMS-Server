@@ -7,10 +7,7 @@ const { TollDetails } = require("../models");
 router.get("/", async(req,res) => {
     return TollDetails
            .findAll({
-             include : [{
-               model : TollBookings,
-               as : TollBookings
-             }]
+            
            })
            .then((tolls) => res.status(200).send(tolls))
            .catch((error) => res.status(400).send(error))
