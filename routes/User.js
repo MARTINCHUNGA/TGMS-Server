@@ -4,17 +4,17 @@ const router = express.Router();
 const { Users } = require("../models");
 const bcrypt = require('bcrypt')
 const { sign } = require('jsonwebtoken');
-const { validateToken } = require("../middleware/Auth");
+const { validateToken,authRole } = require("../middleware/Auth");
 
 // User routes
-router.get("/", async(req,res) => {
+router.get("/", validateToken, async(req,res) => {
     return Users
            .findAll()
            .then((user) => res.status(200).send(user))
            .catch((error) => res.status(400).send(error))
 }) 
 
-router.get("/specific/:id", (req, res) =>{
+router.get("/specific/:id", validateToken, (req, res) =>{
     return Users
       .findByPk(req.params.id)
       .then((user) => {
@@ -47,61 +47,56 @@ router.post("/register", async(req, res) => {
   )
   if (userAlreadyExists) {
       return res.status(409).json({message: "User with email already exists!" })
+  } else {
+
+    //create user with hashed password
+    bcrypt.hash(password, 10).then((hash) => {
+      const newUser = new Users({
+        username: username,
+        email: email,
+        phone: phone,
+        password : hash,
+        confirmPassword : hash})
+    
+        //save the user 
+        const savedUser =  newUser.save().catch((err) => {
+          console.log("Error", err)
+          res.status(500).json({error: "cannot register user at the moment!"})
+        })
+        if(savedUser) res.json({message: "Thanks for registering"}) 
+    })
+    
   }
-  //create user with hashed password
-  bcrypt.hash(password, 10).then((hash) => {
-    const newUser = new Users({
-      username: username,
-      email: email,
-      phone: phone,
-      password : hash,
-      confirmPassword : hash})
-  
-      //save the user 
-      const savedUser =  newUser.save().catch((err) => {
-        console.log("Error", err)
-        res.status(500).json({error: "cannot register user at the moment!"})
-      })
-      if(savedUser) res.json({message: "Thanks for registering"}) 
-  })
-   
   },
 ) 
 
 
 
 
-router.post("/login", async(req,res) =>{
+router.post("/login",  async(req,res) =>{
   const { username, password } = req.body
   const user = await Users.findOne({ where: { username: username }}) 
 
   //check if the user exist
-  if(!user) res.json({error: "User does not exist"});
+  if(!user) {
+    res.json({error: "User does not exist"})
+  } else {
+    bcrypt.compare(password, user.password).then((match) => {
 
-  bcrypt.compare(password, user.password).then((match) => {
-
-    if(!match) res.json({error : "Password and username does not match"});
-
-
-    const accessToken = sign(
-      { username : user.username, id : user.id},
-       "importantsecret"
-       ); 
-
-    
-    res.json({token: accessToken, username: user.username, id: user.id});
-  })
-
-  
+      if(!match) {
+        res.json({error : "Password and username does not match"});
+      } else {
+        const accessToken = sign(
+          { username : user.username, id : user.id},
+           "importantsecret"
+           ); 
+        res.json(accessToken);
+      }
+    })
+  }
 })
 
-//check if user is aunthenticated
-router.get("/auth", validateToken, (req,res) => {
-  res.json(req.user);
-})
-
-
-router.delete("/delete/:id", async(req,res) => {
+router.delete("/delete/:id", validateToken, async(req,res) => {
     return Users
            .findByPk(req.params.id)
            .then(user =>{
@@ -118,7 +113,7 @@ router.delete("/delete/:id", async(req,res) => {
 
 });
 
-router.put("/update/:id", async(req,res) => {
+router.put("/update/:id", validateToken, async(req,res) => {
     return Users
            .findByPk(req.params.id)
            .then(user => {

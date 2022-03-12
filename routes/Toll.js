@@ -6,9 +6,13 @@ const { TollDetails } = require("../models");
 // Toll routes
 router.get("/", async(req,res) => {
     return TollDetails
+<<<<<<< HEAD
            .findAll({
             
            })
+=======
+           .findAll()
+>>>>>>> 57bbe7a7964ce3a2c53e76295078672f093eae43
            .then((tolls) => res.status(200).send(tolls))
            .catch((error) => res.status(400).send(error))
 }) 
