@@ -8,20 +8,20 @@ module.exports = (sequelize,DataTypes) => {
             type : DataTypes.STRING,
             allowNull : false
         },
-        tollName : {
+        // tollName : {
+        //     type : DataTypes.STRING,
+        //     allowNull : false
+        // }, 
+        vehicleType : {
             type : DataTypes.STRING,
             allowNull : false
-        }, 
-        // vehicleType : {
+        },
+        // regNumber : {
         //     type : DataTypes.STRING,
         //     allowNull : false
         // },
-        // price : {
-        //     type : DataTypes.STRING,
-        //     allowNull : false
-        // },
-        tripPlan : {
-            type : DataTypes.STRING,
+        price : {
+            type : DataTypes.INTEGER,
             allowNull : false
         },
     });
@@ -36,7 +36,13 @@ module.exports = (sequelize,DataTypes) => {
             foreignKey: 'TollDetail_id',
             as : 'TollDetails',
             OnDelete : 'NO ACTION'
-        })  
+        });  
+
+        // TollBookings.hasMany(models.Vehicles, {
+        //     foreignKey: 'vehicle_id',
+        //     as : 'vehicles',
+        //     onDelete: 'CASCADE'
+        // });
     }
 
     return TollBookings;

@@ -30,7 +30,7 @@ router.get("/specific/:id", (req, res) =>{
       });
   },)
 
-router.post("/", async(req, res) => {
+router.post("/addVehicle", async(req, res) => {
     return Vehicles
       .create({ 
         vehicleType : req.body.vehicleType,
