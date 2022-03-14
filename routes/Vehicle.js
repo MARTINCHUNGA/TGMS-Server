@@ -5,7 +5,7 @@ const { Vehicles } = require("../models");
 
 //vehicle routes
 
-router.get("/", async(req,res) => {
+router.get("/allvehicle", async(req,res) => {
     return Vehicles
            .findAll()
            .then((vehicle) => res.status(200).send(vehicle))
@@ -59,7 +59,7 @@ router.delete("/delete/:id", async(req,res) => {
 
 });
 
-router.put("/", async(req,res) => {
+router.put("/update/:id", async(req,res) => {
     return Vehicles
            .findByPk(req.params.id)
            .then(vehicle => {
