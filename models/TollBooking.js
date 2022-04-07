@@ -8,20 +8,24 @@ module.exports = (sequelize,DataTypes) => {
             type : DataTypes.STRING,
             allowNull : false
         },
-        // tollName : {
-        //     type : DataTypes.STRING,
-        //     allowNull : false
-        // }, 
+        tollName : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
+        section: {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
         vehicleType : {
             type : DataTypes.STRING,
             allowNull : false
         },
-        // regNumber : {
-        //     type : DataTypes.STRING,
-        //     allowNull : false
-        // },
+        regNumber : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
         price : {
-            type : DataTypes.INTEGER,
+            type : DataTypes.STRING,
             allowNull : false
         },
     });

@@ -35,9 +35,13 @@ router.post("/addBooking", async(req, res) => {
     return TollBookings
       .create(
       { 
-        district : req.body.district,
-        vehicleType : req.body.vehicleType,
-         price : req.body.price,
+        district: req.body.district,
+        tollName: req.body.tollName,
+        section: req.body.section,
+        vehicleType: req.body.vehicleType,
+        regNumber: req.body.regNumber,
+        price: req.body.price,
+        
         //tripPlan : req.body.tripPlan,
         TollDetail_id : req.body.TollDetail_id
       })
