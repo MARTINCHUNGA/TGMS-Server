@@ -6,6 +6,7 @@ const { route } = require("./User");
 
 
 // Fair routes
+//get all fairs
 router.get("/", async(req,res) => {
     return Fairs
            .findAll()
@@ -13,7 +14,7 @@ router.get("/", async(req,res) => {
            .catch((error) => res.status(400).send(error))
 }) 
 
-
+//get a specific fair by id
 router.get("/specific/:id", (req, res) =>{
     return Fairs
       .findByPk(req.params.id)
@@ -30,7 +31,7 @@ router.get("/specific/:id", (req, res) =>{
         res.status(400).send(error);
       });
   },)
-
+//create a new fair
 router.post("/addfair", async(req, res) => {
     return Fairs
       .create({ 
@@ -44,7 +45,7 @@ router.post("/addfair", async(req, res) => {
   },
 ) 
 
-
+//delete fair by id
 router.delete("/delete/:id", async(req,res) => {
     return Fairs
            .findByPk(req.params.id)
@@ -62,6 +63,7 @@ router.delete("/delete/:id", async(req,res) => {
 
 });
 
+//update fair by id
 router.put("/update/:id", async(req,res) => {
     return Fairs
            .findByPk(req.params.id)

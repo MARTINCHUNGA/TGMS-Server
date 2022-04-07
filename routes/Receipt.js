@@ -6,6 +6,7 @@ const { Receipt } = require("../models");
 
 
 //Receipts routes
+//get all receipts
 router.get("/", async(req,res) => {
     return Receipt
            .findAll()
@@ -13,6 +14,7 @@ router.get("/", async(req,res) => {
            .catch((error) => res.status(400).send(error))
 })
 
+//get a specific receipt by id
 router.get("/specific/:id", (req, res) =>{
     return Receipt
       .findByPk(req.params.id)
@@ -30,6 +32,7 @@ router.get("/specific/:id", (req, res) =>{
       });
   },)
 
+  //create a new receipt
   router.post("/addReceipt", async(req, res) => {
     return Receipt
       .create({ 
@@ -43,7 +46,7 @@ router.get("/specific/:id", (req, res) =>{
   },
 ) 
 
-
+//delete receipt by id
 router.delete("/delete/:id", async(req,res) => {
     return Receipt
            .findByPk(req.params.id)
@@ -60,16 +63,18 @@ router.delete("/delete/:id", async(req,res) => {
            .catch((error) => res.status(400).send(error))
 
 });
-
+//update receipt by id
 router.put("/update/:id", async(req,res) => {
     return Receipt
            .findByPk(req.params.id)
            .then(receipt => {
                if(!receipt){
+                 //send this message if receipt not found
                    return res.status(404).send({
                        message : "Receipt not found in the database"
                    })
                }
+               //return receipt
                return receipt
                       .update({
                         tollName : req.body.tollName,

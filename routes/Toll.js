@@ -4,6 +4,7 @@ const { TollDetails } = require("../models");
 
 
 // Toll routes
+//get all tolls
 router.get("/", async(req,res) => {
     return TollDetails
            .findAll()
@@ -11,16 +12,18 @@ router.get("/", async(req,res) => {
            .catch((error) => res.status(400).send(error))
 }) 
 
-
+//get specific toll by id
 router.get("/specific/:id", (req, res) =>{
     return TollDetails
       .findByPk(req.params.id)
       .then((tolls) => {
         if (!tolls) {
+          //if toll not found send this message
           return res.status(404).send({
             message: 'Toll Not Found',
           });
         }
+        //toll found and return it
         return res.status(200).send(tolls);
       })
       .catch((error) => {
@@ -29,6 +32,7 @@ router.get("/specific/:id", (req, res) =>{
       });
   },)
 
+//create a new toll
 router.post("/addToll", async(req, res) => {
     return TollDetails
       .create({ 
@@ -41,16 +45,18 @@ router.post("/addToll", async(req, res) => {
   },
 ) 
 
-
+//delete toll by id
 router.delete("/delete/:id", async(req,res) => {
     return TollDetails
            .findByPk(req.params.id)
            .then(toll =>{
                if(!toll){
+                 //toll not found send this message
                    return res.status(400).send({
                        message : "Toll not found in the database"
                    });
                }
+               //toll found and perform delete operation
                return toll.destroy()
                           .then(() => res.status(204).send())
                           .catch((error) => res.status(400).send(error))
@@ -59,15 +65,18 @@ router.delete("/delete/:id", async(req,res) => {
 
 });
 
+// update specific toll by id
 router.put("/update/:id", async(req,res) => {
     return TollDetails
            .findByPk(req.params.id)
            .then(toll => {
                if(!toll){
+                 //toll not found send this message
                    return res.status(404).send({
                        message : "Toll not found in the database"
                    })
                }
+               //toll found and perform update action
                return toll
                       .update({
                         district : req.body.district,

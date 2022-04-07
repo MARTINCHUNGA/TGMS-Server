@@ -19,11 +19,10 @@ module.exports = (sequelize,DataTypes) => {
             type : DataTypes.STRING,
             allowNull : false
         },
-        // role : {
-        //     type : DataTypes.STRING,
-        //     default: user,
-        //     allowNull : false
-        // },
+        role : {
+            type : DataTypes.STRING,
+            allowNull : false
+        },
         password : {
             type : DataTypes.STRING,
             allowNull : false

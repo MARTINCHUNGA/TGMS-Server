@@ -4,7 +4,7 @@ const router = express.Router();
 const { TollBookings } = require("../models");
 
 
-//TollBooking routes
+//getting all toll bookings
 router.get("/", async(req,res) => {
     return TollBookings
            .findAll()
@@ -12,7 +12,7 @@ router.get("/", async(req,res) => {
            .catch((error) => res.status(400).send(error))
 }) 
 
-
+//getting a specific tool booking by id
 router.get("/specific/:id", (req, res) =>{
     return TollBookings
       .findByPk(req.params.id)
@@ -30,6 +30,7 @@ router.get("/specific/:id", (req, res) =>{
       });
   },)
 
+//creating a new toll booking
 router.post("/addBooking", async(req, res) => {
     return TollBookings
       .create(
@@ -45,8 +46,8 @@ router.post("/addBooking", async(req, res) => {
   },
 ) 
 
-
-router.delete("/", async(req,res) => {
+//deleting a specific tollbooking by id
+router.delete("/delete/:id", async(req,res) => {
     return TollBookings
            .findByPk(req.params.id)
            .then(bookings =>{
@@ -63,16 +64,19 @@ router.delete("/", async(req,res) => {
 
 });
 
+//updating a specific toll booking by id
 router.put("/update/:id",  async(req,res) => {
     return TollBookings
            .findByPk(req.params.id)
            .then(bookings => {
                if(!bookings){
+                 //if toll booking not found by id then send this message
                    return res.status(404).send({
                        message : "TollBooking not found in the database"
                    })
                }
                return bookings
+               //update toll booking if found
                       .update({
                         district : req.body.district,
                         vehicleType : req.body.vehicleType,

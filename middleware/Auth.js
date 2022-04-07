@@ -38,7 +38,4 @@ const authRole = (req, res, next) => {
   }
 }
 
-
-
-
 module.exports = { validateToken, authUser, authRole}
